@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 编解码工具</title>
+    <link href="https://registry.npmmirror.com/bootstrap/5.3.3/files/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --background-light: #f8f9fa;
+            --background-dark: #121212;
+            --text-light: #212529;
+            --text-dark: #e0e0e0;
+            --container-light: #fff;
+            --container-dark: #1f1f1f;
+            --input-light: #fff;
+            --input-dark: #333;
+            --input-border-light: #ced4da;
+            --input-border-dark: #555;
+            --input-focus-border: #80bdff;
+            --input-focus-light: #f1f3f5;
+            --placeholder-light: #6c757d;
+            --placeholder-dark: #ffcc00;
+            --btn-primary: #007bff;
+            --btn-primary-hover: #0056b3;
+            --btn-secondary: #6c757d;
+            --btn-secondary-hover: #5a6268;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--background-light);
+            background-image: linear-gradient(0deg, transparent 24%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.05) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.05) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            margin: 0;
+            padding: 0 10px;
+            color: var(--text-light);
+        }
+
+        .container {
+            max-width: 500px;
+            padding: 20px;
+            background-color: var(--container-light);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 120px 0;
+        }
+
+        @media (prefers-color-scheme: dark) {
+        body {
+            background-color: var(--background-dark);
+            background-image: linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent), 
+                            linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent);
+            color: var(--text-dark);
+        }
+        .container {
+            background-color: var(--container-dark);
+        }
+        .form-control, .form-check-input {
+            background-color: var(--input-dark);
+            color: var(--text-dark); /* 确保文本颜色为白色 */
+            border: 1px solid var(--input-border-dark);
+        }
+        .form-control:focus {
+            border-color: var(--input-focus-border);
+            background-color: #444;
+            color: var(--text-dark); /* 确保文本颜色为白色 */
+        }
+        .form-control::placeholder {
+            color: var(--placeholder-dark);
+            opacity: 1;
+        }
+        .btn-primary {
+            background-color: var(--btn-primary);
+            border-color: var(--btn-primary);
+        }
+        .btn-primary:hover {
+            background-color: var(--btn-primary-hover);
+            border-color: var(--btn-primary-hover);
+        }
+        .btn-outline-secondary {
+            border-color: var(--btn-secondary);
+            color: var(--btn-secondary);
+        }
+        .btn-outline-secondary:hover {
+            background-color: var(--btn-secondary);
+            border-color: var(--btn-secondary);
+            color: #fff;
+        }
+    }
+        
+        @media (prefers-color-scheme: light) {
+            body {
+                background-color: var(--background-light);
+                color: var(--text-light);
+            }
+            .container {
+                background-color: var(--container-light);
+            }
+            .form-control, textarea {
+                background-color: var(--input-light);
+                color: var(--text-light);
+                border: 1px solid var(--input-border-light);
+            }
+            .form-control:focus, textarea:focus {
+                border-color: var(--input-focus-border);
+                background-color: var(--input-focus-light);
+            }
+            .form-control::placeholder, textarea::placeholder {
+                color: var(--placeholder-light);
+            }
+            .btn-primary {
+                background-color: var(--btn-primary);
+                border-color: var(--btn-primary);
+            }
+            .btn-primary:hover {
+                background-color: var(--btn-primary-hover);
+                border-color: var(--btn-primary-hover);
+            }
+            .btn-secondary {
+                background-color: var(--btn-secondary);
+                border-color: var(--btn-secondary);
+                color: #fff;
+            }
+            .btn-secondary:hover {
+                background-color: var(--btn-secondary-hover);
+                border-color: var(--btn-secondary-hover);
+                color: #fff;
+            }
+            .btn-outline-secondary {
+                border-color: var(--btn-secondary);
+                color: var(--btn-secondary);
+            }
+            .btn-outline-secondary:hover {
+                background-color: var(--btn-secondary);
+                border-color: var(--btn-secondary);
+                color: #fff;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            body {
+                align-items: flex-start;
+                padding-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../" class="btn btn-link" style="text-decoration: none;">返回主页</a>
+        <h2 class="text-center">Base64 编解码工具</h2>
+        <form>
+            <div class="mb-3">
+                <label for="inputText" class="form-label">输入文本</label>
+                <textarea class="form-control" id="inputText" rows="4" placeholder="输入要编码或解码的文本"></textarea>
+            </div>
+            <button type="button" class="btn btn-primary w-100" onclick="encodeBase64()">编码</button>
+            <button type="button" class="btn btn-secondary w-100 mt-2" onclick="decodeBase64()">解码</button>
+        </form>
+        <div class="mt-3">
+            <label for="outputText" class="form-label">输出文本</label>
+            <div class="input-group">
+                <textarea class="form-control" id="outputText" rows="4" readonly></textarea>
+                <button class="btn btn-outline-secondary" type="button" onclick="copyOutput()">复制</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function encodeBase64() {
+            const inputText = document.getElementById('inputText').value;
+            const encodedText = btoa(unescape(encodeURIComponent(inputText)));
+            document.getElementById('outputText').value = encodedText;
+        }
+
+        function decodeBase64() {
+            const inputText = document.getElementById('inputText').value;
+            try {
+                const decodedText = decodeURIComponent(escape(atob(inputText)));
+                document.getElementById('outputText').value = decodedText;
+            } catch (e) {
+                alert('无效的 Base64 编码');
+            }
+        }
+
+        function copyOutput() {
+            const outputText = document.getElementById('outputText');
+            const copyButton = document.querySelector('.input-group .btn');
+
+            outputText.select();
+            outputText.setSelectionRange(0, 99999);
+
+            document.execCommand('copy');
+
+            copyButton.textContent = '复制成功';
+            setTimeout(() => {
+                copyButton.textContent = '复制';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
