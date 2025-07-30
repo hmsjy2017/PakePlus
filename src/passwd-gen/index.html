@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机密码生成器</title>
+    <link href="https://registry.npmmirror.com/bootstrap/5.3.3/files/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --background-light: #f8f9fa;
+            --background-dark: #121212;
+            --text-light: #212529;
+            --text-dark: #e0e0e0;
+            --container-light: #fff;
+            --container-dark: #1f1f1f;
+            --input-light: #fff;
+            --input-dark: #333;
+            --input-border-light: #ced4da;
+            --input-border-dark: #555;
+            --input-focus-border: #80bdff;
+            --input-focus-light: #f1f3f5;
+            --placeholder-light: #6c757d;
+            --placeholder-dark: #ffcc00;
+            --btn-primary: #007bff;
+            --btn-primary-hover: #0056b3;
+            --btn-secondary: #6c757d;
+            --btn-secondary-hover: #5a6268;
+        }
+
+        /* 减小桌面端标题字号 */
+        @media (min-width: 1024px) {
+                h1 {
+                    font-size: 1.85rem;
+                }
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--background-light);
+            background-image: linear-gradient(0deg, transparent 24%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.05) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.05) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.05) 75%, rgba(0,0,0,0.05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            margin: 0;
+            padding: 0 10px;
+            box-sizing: border-box;
+            color: var(--text-light);
+        }
+
+        .container {
+            max-width: 500px;
+            padding: 20px;
+            background-color: var(--container-light);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 40px 0;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: var(--background-dark);
+                background-image: linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent), 
+                                linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent);
+                color: var(--text-dark);
+            }
+            .container {
+                background-color: var(--container-dark);
+            }
+            .form-control, .form-check-input {
+                background-color: var(--input-dark);
+                color: var(--text-dark);
+                border: 1px solid var(--input-border-dark);
+            }
+            .form-control:focus {
+                border-color: var(--input-focus-border);
+                background-color: #444;
+                color: var(--text-dark);
+            }
+            .form-control::placeholder {
+                color: var(--placeholder-dark);
+                opacity: 1;
+            }
+            .btn-primary {
+                background-color: var(--btn-primary);
+                border-color: var(--btn-primary);
+            }
+            .btn-primary:hover {
+                background-color: var(--btn-primary-hover);
+                border-color: var(--btn-primary-hover);
+            }
+            .btn-outline-secondary {
+                color: var(--btn-secondary);
+                border-color: var(--btn-secondary);
+            }
+            .btn-outline-secondary:hover {
+                color: var(--btn-secondary-hover);
+                border-color: var(--btn-secondary-hover);
+                color: #fff;
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            body {
+                background-color: var(--background-light);
+                color: var(--text-light);
+            }
+            .container {
+                background-color: var(--container-light);
+            }
+            .form-control, .form-check-input {
+                background-color: var(--input-light);
+                color: var(--text-light);
+                border: 1px solid var(--input-border-light);
+            }
+            .form-control:focus {
+                border-color: var(--input-focus-border);
+                background-color: var(--input-focus-light);
+                color: var(--text-light);
+            }
+            .form-control::placeholder {
+                color: var(--placeholder-light);
+            }
+            .btn-primary {
+                background-color: var(--btn-primary);
+                border-color: var(--btn-primary);
+            }
+            .btn-primary:hover {
+                background-color: var(--btn-primary-hover);
+                border-color: var(--btn-primary-hover);
+                color: #fff;
+            }
+            .btn-outline-secondary {
+                color: var(--btn-secondary);
+                border-color: var(--btn-secondary);
+            }
+            .btn-outline-secondary:hover {
+                background-color: var(--btn-secondary);
+                border-color: var(--btn-secondary);
+                color: #fff;
+            }
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        @media (max-width: 576px) {
+            body {
+                align-items: flex-start;
+                padding-top: 80px;
+            }
+        }
+
+        /* 增加文字与文本框之间的距离 */
+        label + .form-control, label + .input-group {
+            margin-top: 0.5rem; /* 调整这个值来增加或减少间距 */
+        }
+
+        .mb-3, .mt-3 {
+            margin-bottom: 1rem; /* 调整这个值来增加或减少表单组之间的间距 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../" class="btn btn-link" style="text-decoration: none;">返回主页</a>
+        <h1 class="text-center">随机密码生成器</h1>
+        <form>
+            <div class="mb-3">
+                <label for="length">密码长度</label>
+                <input type="number" class="form-control" id="length" placeholder="输入长度" min="1" max="128" value="16">
+            </div>
+            <div class="form-check mb-2">
+                <input type="checkbox" class="form-check-input" id="includeLowercase" checked>
+                <label class="form-check-label" for="includeLowercase">包含小写字母</label>
+            </div>
+            <div class="form-check mb-2">
+                <input type="checkbox" class="form-check-input" id="includeUppercase" checked>
+                <label class="form-check-label" for="includeUppercase">包含大写字母</label>
+            </div>
+            <div class="form-check mb-2">
+                <input type="checkbox" class="form-check-input" id="includeNumbers" checked>
+                <label class="form-check-label" for="includeNumbers">包含数字</label>
+            </div>
+            <div class="form-check mb-2">
+                <input type="checkbox" class="form-check-input" id="includeSymbols" checked>
+                <label class="form-check-label" for="includeSymbols">包含符号</label>
+            </div>
+            <button type="button" class="btn btn-primary btn-block" onclick="generatePassword()">生成密码</button>
+        </form>
+        <div class="mt-3">
+            <label for="password">生成的密码</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="password" readonly>
+                <button class="btn btn-outline-secondary" type="button" onclick="copyPassword()">复制</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generatePassword() {
+            const length = document.getElementById('length').value;
+            const includeLowercase = document.getElementById('includeLowercase').checked;
+            const includeUppercase = document.getElementById('includeUppercase').checked;
+            const includeNumbers = document.getElementById('includeNumbers').checked;
+            const includeSymbols = document.getElementById('includeSymbols').checked;
+
+            const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+            const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const numbers = '0123456789';
+            const symbols = '!@#$%^&*()_+~`|}{[]:;?><,./-=';
+
+            let characters = '';
+            if (includeLowercase) characters += lowercase;
+            if (includeUppercase) characters += uppercase;
+            if (includeNumbers) characters += numbers;
+            if (includeSymbols) characters += symbols;
+
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                password += characters[randomIndex];
+            }
+
+            document.getElementById('password').value = password;
+        }
+
+        function copyPassword() {
+            const passwordField = document.getElementById('password');
+            const copyButton = document.querySelector('.input-group .btn');
+
+            passwordField.select();
+            passwordField.setSelectionRange(0, 99999); // For mobile devices
+
+            document.execCommand('copy');
+
+            copyButton.textContent = '复制成功';
+            setTimeout(() => {
+                copyButton.textContent = '复制';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
